@@ -41,10 +41,11 @@ def renderHome(req, db, user):
     if not repository:
         repository = user.getDefaultRepository(db)
 
-    title_fullname = user.fullname
+    title_fullname = '' if not user.fullname else user.fullname
 
-    if title_fullname[-1] == 's': title_fullname += "'"
-    else: title_fullname += "'s"
+    if title_fullname:
+        if title_fullname[-1] == 's': title_fullname += "'"
+        else: title_fullname += "'s"
 
     cursor.execute("SELECT email FROM usergitemails WHERE uid=%s ORDER BY email ASC", (user.id,))
     gitemails = ", ".join([email for (email,) in cursor])
