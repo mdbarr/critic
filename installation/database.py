@@ -35,7 +35,7 @@ def psql_import(sql_file, as_user=None):
     # Make sure file is readable by postgres user
     os.chmod(temp_file, 0644)
     subprocess.check_output(
-        ["su", "-s", "/bin/sh", "-c", "psql -v ON_ERROR_STOP=1 -f %s" % temp_file, as_user])
+        ["su", "-s", "/bin/sh", "-c", "psql -v ON_ERROR_STOP=1 --dbname=critic -f %s" % temp_file, as_user])
     os.unlink(temp_file)
 
 def add_arguments(mode, parser):
@@ -202,7 +202,7 @@ ERROR: Critic requires PostgreSQL 9.1.x or later!
                adapt(installation.system.hostname), adapt(data["sha1"])))
 
         installation.process.check_input(
-            ["su", "-s", "/bin/sh", "-c", "psql -q -v ON_ERROR_STOP=1 -f -", installation.system.username],
+            ["su", "-s", "/bin/sh", "-c", "psql -q -v ON_ERROR_STOP=1 --dbname=critic -f -", installation.system.username],
             stdin=add_systemidentity_query)
 
     return True
